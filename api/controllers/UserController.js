@@ -17,13 +17,11 @@ module.exports = {
         const {email, password} = req.body
 
         const user = await User.findOne({email})
-
         if (!user) {
             res.status(401).json({
                 message: "Email is not registered"
             })
         }
-
         const passwordValid =await argon2.verify(user.password, password)
         if (!passwordValid) {
             return res.status(400).json({
@@ -49,15 +47,15 @@ module.exports = {
         const {email, password}= req.body
 
         const user = await User.findOne({email})
-        
         if (user) {
-            return res.status(400).json({message: 'Email already exists!'})
+          return res.status(400).json({message: 'Email already exists!'})
         }
         const hashPassword = await argon2.hash(password)
-
+        
         const newUser = await User.create({
-            email, 
-            password: hashPassword,
+          email, 
+          password: hashPassword,
+          imageUrl: req.params.imageUrl
         }).fetch()
         
         const accessToken = jwt.sign(

@@ -11,6 +11,7 @@
 module.exports.routes = {
     'POST /user/login': 'UserController.login',
     'POST /user/register': 'UserController.register',
+    
 
     //Project
     'POST /projects': 'ProjectController.create',
@@ -19,6 +20,7 @@ module.exports.routes = {
 
 
     //Issue
+    'GET /issues': 'IssuesController.getAll',
     'POST /issues': 'IssuesController.create',
     'DELETE /issues/:id': 'IssuesController.delete',
     'PATCH /issues/:id': 'IssuesController.update'

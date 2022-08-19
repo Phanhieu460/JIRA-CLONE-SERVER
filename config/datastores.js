@@ -53,7 +53,7 @@ module.exports.datastores = {
 
     adapter: 'sails-mongo',
     url: 'mongodb://localhost:27017/JIRA-CLONE',
-    // url: 'mongodb+srv://hieu1312:hieu1312@jira-clone.jsg3fpc.mongodb.net/?retryWrites=true&w=majority'
+    // url: 'mongodb://hieu1312:hieu1312@jira-clone.jsg3fpc.mongodb.net/?retryWrites=true&w=majority'
 
   },
 
