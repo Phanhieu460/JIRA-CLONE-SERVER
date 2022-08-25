@@ -7,35 +7,59 @@
 
 
 var jwt = require('jsonwebtoken')
-var argon2 = require('argon2')
+var argon2 = require('argon2');
 require('dotenv').config()
 
 module.exports = {
+  async getAll(req, res) {
+    const user =await User.find({})
+    try {
+        if (user) {
+            res.status(200).json({
+                success: true,
+                allIssue,
+                message: "Fetch all issue successfully"
+            })
+        } else {
+            res.status(401).json({
+                success: false,
+                data: null,
+                message:'Error'
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server"
+        })
+    }
+  },
   login: async function(req, res) {
     try {
-        
         const {email, password} = req.body
 
-        const user = await User.findOne({email})
-        if (!user) {
+        const newUser = await User.findOne({email})
+        if (!newUser) {
             res.status(401).json({
+              success: false,
                 message: "Email is not registered"
             })
         }
-        const passwordValid =await argon2.verify(user.password, password)
+        const passwordValid =await argon2.verify(newUser.password, password)
         if (!passwordValid) {
             return res.status(400).json({
-                message: 'Unauthorized'
+              success: false,
+                message: 'Incorrect password'
             })
         }
         const accessToken = jwt.sign(
-          { userId: user.id },
+          { userId: newUser.id },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: "1 day" }
         );
         return res
           .status(200)
-          .json({ user, accessToken, message: "Loggin successfuly" });
+          .json({success: true, newUser, accessToken, message: "Loggin successfuly" });
 
 
     } catch (error) {
@@ -45,10 +69,9 @@ module.exports = {
   register: async function(req, res) {
     try {
         const {email, password}= req.body
-
         const user = await User.findOne({email})
         if (user) {
-          return res.status(400).json({message: 'Email already exists!'})
+          return res.status(400).json({success: false,message: 'Email already exists!'})
         }
         const hashPassword = await argon2.hash(password)
         
@@ -64,7 +87,8 @@ module.exports = {
           { expiresIn: "1d" }
         );
 
-        return res.json({
+        return res.status(200).json({
+          success: true,
             newUser,
             accessToken, 
             message: 'Create user successfully'

@@ -40,14 +40,16 @@ module.exports = {
         assignee: params.assignee,
         reporter: params.reporter,
         status: params.status,
+        priority: params.priority
       }).fetch();
 
       return res.status(200).json({
+        success: true,
         newIssue,
         message: "Create issue successfully!",
       });
     } catch (error) {
-      res.serverError({ message: error });
+      res.serverError({ message: error, success: false });
     }
   },
   async update(req, res) {
@@ -78,11 +80,12 @@ module.exports = {
       const result = await Issues.update({ id: req.params.id }, attributes);
 
       return res.status(200).json({
+        success: true,
         result,
         message: "Issue Updated Successfully",
       });
     } catch (error) {
-      return res.serverError({ message: error });
+      return res.serverError({ message: error, success: false });
     }
   },
   async delete(req, res) {
@@ -91,11 +94,12 @@ module.exports = {
         id: req.params.id,
       });
       return res.status(200).json({
+        success: true,
         result,
         message: "Issue moved to trash!",
       });
     } catch (error) {
-      res.serverError({ message: error });
+      res.serverError({ message: error, success: false });
     }
   },
 };

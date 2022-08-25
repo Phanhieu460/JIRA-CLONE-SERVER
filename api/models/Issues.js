@@ -6,33 +6,34 @@
  */
 
 module.exports = {
-//project, priority, estimate
+//estimate
   attributes: {
+    // projectId: {
+    //   type: 'string',
+    //   required: true
+    // },
     title: {
       type: 'string',
       required: true,
-      unique: true
     },
     issueType: {
       type: 'string',
       required: true,
-      isIn: ['Task', 'Bug']
+      isIn: ['Task', 'Epic']
     },
     description: {
       type: 'string',
     },
     assignee: {
       type: 'string',
-      required: true
     },
     reporter: {
       type: 'string',
-      required: true
     },
     status: {
       type: 'string',
-      required: true,
-      isIn: ['To Do', 'In Progress', 'Testing', 'Cancel', 'Done']
+      defaultsTo: 'BACKLOG',
+      isIn: ['BACKLOG', 'IN PROGRESS', 'SELECTED FOR DEVELOPMENT', 'DONE']
     },
     priority: {
       type:'string', 

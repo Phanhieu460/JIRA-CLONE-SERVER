@@ -11,9 +11,12 @@
 module.exports.routes = {
     'POST /user/login': 'UserController.login',
     'POST /user/register': 'UserController.register',
+    'GET /user/verify': 'UserController.verify',
     
 
     //Project
+    'GET /projects': 'ProjectController.getAllProject',
+    'GET /projects/:id': 'ProjectController.getProjectById',
     'POST /projects': 'ProjectController.create',
     'PATCH /projects/:id': 'ProjectController.update',
     'DELETE /projects/:id': 'ProjectController.delete',
