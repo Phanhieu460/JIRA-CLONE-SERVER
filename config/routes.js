@@ -11,7 +11,8 @@
 module.exports.routes = {
     'POST /user/login': 'UserController.login',
     'POST /user/register': 'UserController.register',
-    'GET /user/verify': 'UserController.verify',
+    'GET /user/listUser': 'UserController.getAll',
+    'GET /user/:id': 'UserController.getUserById',
     
 
     //Project
@@ -23,8 +24,9 @@ module.exports.routes = {
 
 
     //Issue
-    'GET /issues': 'IssuesController.getAll',
+    'GET /issues/:projectId/listIssue': 'IssuesController.getAll',
     'POST /issues': 'IssuesController.create',
     'DELETE /issues/:id': 'IssuesController.delete',
-    'PATCH /issues/:id': 'IssuesController.update'
+    'PATCH /issues/:id': 'IssuesController.update',
+    'POST /issues/search': 'IssuesController.search'
 };

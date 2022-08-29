@@ -12,7 +12,7 @@ module.exports = {
       if (project) {
         res.status(200).json({
           success: true,
-          allProject,
+          project,
           message: "Fetch project successfully",
         });
       } else {
@@ -65,7 +65,7 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const { name, description, url } = req.body;
+      const { name, description, url, category } = req.body;
       let attributes = {};
 
       if (name) {
@@ -76,6 +76,9 @@ module.exports = {
       }
       if (url) {
         attributes.url = url;
+      }
+      if (category) {
+        attributes.category = category;
       }
 
       const result = await Project.update({ id: req.params.id }, attributes);

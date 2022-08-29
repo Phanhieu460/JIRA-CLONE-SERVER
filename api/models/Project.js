@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+  name: 'project',
   attributes: {
     name:{
       type: 'string',
@@ -18,6 +18,13 @@ module.exports = {
     },
     url: {
       type: 'string'
+    },
+    category: {
+type: 'string'
+    },
+    issue: {
+      collection: 'issues',
+      via:'project'
     }
   },
 

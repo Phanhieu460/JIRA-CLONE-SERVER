@@ -11,14 +11,37 @@ var argon2 = require('argon2');
 require('dotenv').config()
 
 module.exports = {
+  async getUserById(req, res) {
+    const user =await User.findOne({id: req.params.id})
+    try {
+        if (user) {
+            res.status(200).json({
+                success: true,
+                user,
+                message: "Fetch user successfully"
+            })
+        } else {
+            res.status(401).json({
+                success: false,
+                data: null,
+                message:'Error'
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server"
+        })
+    }
+  },
   async getAll(req, res) {
     const user =await User.find({})
     try {
         if (user) {
             res.status(200).json({
                 success: true,
-                allIssue,
-                message: "Fetch all issue successfully"
+                user,
+                message: "Fetch all user successfully"
             })
         } else {
             res.status(401).json({
@@ -63,12 +86,15 @@ module.exports = {
 
 
     } catch (error) {
-        res.serverError({message:error})
+      res.status(500).json({
+        success: false,
+        message: "Internal Server"
+    })
     }
   },
   register: async function(req, res) {
     try {
-        const {email, password}= req.body
+        const {email, password, fullName}= req.body
         const user = await User.findOne({email})
         if (user) {
           return res.status(400).json({success: false,message: 'Email already exists!'})
@@ -78,6 +104,7 @@ module.exports = {
         const newUser = await User.create({
           email, 
           password: hashPassword,
+          fullName,
           imageUrl: req.params.imageUrl
         }).fetch()
         
@@ -94,7 +121,10 @@ module.exports = {
             message: 'Create user successfully'
         })
     } catch (error) {
-        return res.serverError({message: error})
+      res.status(500).json({
+        success: false,
+        message: "Internal Server"
+    })
     }
   }
 

@@ -7,40 +7,50 @@
 
 module.exports = {
   async getAll(req, res) {
-    const allIssue =await Issues.find({})
+    const allIssue = await Issues.find({ project: req.params.projectId });
     try {
-        if (allIssue) {
-            res.status(200).json({
-                success: true,
-                allIssue,
-                message: "Fetch all issue successfully"
-            })
-        } else {
-            res.status(401).json({
-                success: false,
-                data: null,
-                message:'Error'
-            })
-        }
+      if (allIssue) {
+        res.status(200).json({
+          success: true,
+          allIssue,
+          message: "Fetch all issue successfully",
+        });
+      } else {
+        res.status(401).json({
+          success: false,
+          data: null,
+          message: "Error",
+        });
+      }
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Internal Server"
-        })
+      res.status(500).json({
+        success: false,
+        message: "Internal Server",
+      });
     }
   },
   async create(req, res) {
     try {
-      let params = req.allParams();
+      const {
+        project,
+        title,
+        issueType,
+        status,
+        reporter,
+        assignee,
+        priority,
+        description,
+      } = req.body;
 
       const newIssue = await Issues.create({
-        title: params.title,
-        issueType: params.issueType,
-        description: params.description,
-        assignee: params.assignee,
-        reporter: params.reporter,
-        status: params.status,
-        priority: params.priority
+        title: title,
+        issueType: issueType,
+        description: description,
+        assignee: assignee,
+        reporter: reporter,
+        status: status,
+        priority: priority,
+        project: project,
       }).fetch();
 
       return res.status(200).json({
@@ -54,7 +64,7 @@ module.exports = {
   },
   async update(req, res) {
     try {
-      const { title, issueType, description, assignee, reporter, status } =
+      const { title, issueType, description, assignee, reporter, status, priority } =
         req.body;
 
       let attributes = {};
@@ -75,7 +85,10 @@ module.exports = {
         attributes.reporter = reporter;
       }
       if (status) {
-        attributes.status = status
+        attributes.status = status;
+      }
+      if (priority) {
+        attributes.priority = priority;
       }
       const result = await Issues.update({ id: req.params.id }, attributes);
 
@@ -100,6 +113,33 @@ module.exports = {
       });
     } catch (error) {
       res.serverError({ message: error, success: false });
+    }
+  },
+  async search(req, res) {
+    console.log(req.body, req.params);
+    try {
+      const issue = await Issues.find({
+        title: { contains: req.body.title },
+        assignee: req.body.assignee,
+      });
+      if (issue) {
+        res.status(200).json({
+          success: true,
+          issue,
+          message: "Search issue successfully",
+        });
+      } else {
+        res.status(401).json({
+          success: false,
+          data: null,
+          message: "Error",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Internal Server",
+      });
     }
   },
 };

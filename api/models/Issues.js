@@ -7,11 +7,11 @@
 
 module.exports = {
 //estimate
+name: 'issues',
   attributes: {
-    // projectId: {
-    //   type: 'string',
-    //   required: true
-    // },
+    project: {
+      model: 'project',
+    },
     title: {
       type: 'string',
       required: true,
@@ -28,7 +28,7 @@ module.exports = {
       type: 'string',
     },
     reporter: {
-      type: 'string',
+     type: 'string',
     },
     status: {
       type: 'string',
