@@ -28,5 +28,5 @@ module.exports.routes = {
     'POST /issues': 'IssuesController.create',
     'DELETE /issues/:id': 'IssuesController.delete',
     'PATCH /issues/:id': 'IssuesController.update',
-    'POST /issues/search': 'IssuesController.search'
+    'GET /projects/:id/issues/search': 'IssuesController.search'
 };

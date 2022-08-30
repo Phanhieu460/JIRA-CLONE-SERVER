@@ -64,8 +64,15 @@ module.exports = {
   },
   async update(req, res) {
     try {
-      const { title, issueType, description, assignee, reporter, status, priority } =
-        req.body;
+      const {
+        title,
+        issueType,
+        description,
+        assignee,
+        reporter,
+        status,
+        priority,
+      } = req.body;
 
       let attributes = {};
 
@@ -116,11 +123,9 @@ module.exports = {
     }
   },
   async search(req, res) {
-    console.log(req.body, req.params);
     try {
       const issue = await Issues.find({
-        title: { contains: req.body.title },
-        assignee: req.body.assignee,
+        or: [{ title: { contains: req.query.q }, project: req.params.id }, { assignee: req.query.q, project: req.params.id }],
       });
       if (issue) {
         res.status(200).json({

@@ -53,9 +53,9 @@ module.exports = {
     }
   },
   async create(req, res) {
-    const { name } = req.body;
+    const { name, description, category, url } = req.body;
 
-    const newProject = await Project.create({ name }).fetch();
+    const newProject = await Project.create({ name, description, category, url }).fetch();
 
     return res.status(200).json({
       newProject,
