@@ -13,6 +13,7 @@ module.exports.routes = {
     'POST /user/register': 'UserController.register',
     'GET /user/listUser': 'UserController.getAll',
     'GET /user/:id': 'UserController.getUserById',
+    'PATCH /user/:id': 'UserController.update',
     
 
     //Project

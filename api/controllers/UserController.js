@@ -126,7 +126,33 @@ module.exports = {
         message: "Internal Server"
     })
     }
-  }
+  },
+  async update(req, res) {
+    try {
+      const {
+        fullName, imgUrl
+      } = req.body;
+
+      let attributes = {};
+
+      if (fullName) {
+        attributes.fullName = fullName;
+      }
+      if (imgUrl) {
+        attributes.imgUrl = imgUrl;
+      }
+      
+      const result = await User.update({ id: req.params.id }, attributes);
+
+      return res.status(200).json({
+        success: true,
+        result,
+        message: "User Updated Successfully",
+      });
+    } catch (error) {
+      return res.serverError({ message: error, success: false });
+    }
+  },
 
 };
 

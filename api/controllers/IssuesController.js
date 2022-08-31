@@ -125,7 +125,7 @@ module.exports = {
   async search(req, res) {
     try {
       const issue = await Issues.find({
-        or: [{ title: { contains: req.query.q }, project: req.params.id }, { assignee: req.query.q, project: req.params.id }],
+        or: [{ title: { contains: req.query.q }, project: req.params.id }, { assignee: { contains: req.query.q }, project: req.params.id }],
       });
       if (issue) {
         res.status(200).json({
