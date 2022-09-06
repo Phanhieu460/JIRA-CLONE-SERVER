@@ -14,7 +14,10 @@ module.exports.routes = {
     'GET /user/listUser': 'UserController.getAll',
     'GET /user/:id': 'UserController.getUserById',
     'PATCH /user/:id': 'UserController.update',
-    
+    'GET /user/google': 'PassportController.googleAuth',
+    'GET /user/google/callback': 'PassportController.googleCallback',
+
+
 
     //Project
     'GET /projects': 'ProjectController.getAllProject',

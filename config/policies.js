@@ -24,5 +24,8 @@ module.exports.policies = {
   UserController: {
     "*": true,
   },
+  PassportController: {
+    "*": true,
+  }
   // '*': true,
 };

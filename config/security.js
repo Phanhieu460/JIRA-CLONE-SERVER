@@ -33,7 +33,7 @@ module.exports.security = {
     allowOrigins: '*',
     allowCredentials: false,
     allowRequestHeaders: "content-type, authorization, access-control-allow-origin",
-    allowRequestMethods: 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH'
+    allowRequestMethods: 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH',
   },
 
 

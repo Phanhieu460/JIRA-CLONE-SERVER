@@ -7,12 +7,12 @@
 
 module.exports = {
   async getAll(req, res) {
-    const allIssue = await Issues.find({ project: req.params.projectId });
+    const result = await Issues.find({ project: req.params.projectId });
     try {
-      if (allIssue) {
+      if (result) {
         res.status(200).json({
           success: true,
-          allIssue,
+          result,
           message: "Fetch all issue successfully",
         });
       } else {
@@ -124,13 +124,13 @@ module.exports = {
   },
   async search(req, res) {
     try {
-      const issue = await Issues.find({
+      const result = await Issues.find({
         or: [{ title: { contains: req.query.q }, project: req.params.id }, { assignee: { contains: req.query.q }, project: req.params.id }],
       });
-      if (issue) {
+      if (result) {
         res.status(200).json({
           success: true,
-          issue,
+          result,
           message: "Search issue successfully",
         });
       } else {

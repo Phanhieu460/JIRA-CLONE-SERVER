@@ -7,6 +7,9 @@
 
 module.exports = {
   attributes: {
+    googleId: {
+type: "string"
+    },
     email: {
       type: "string",
       required: true,
