@@ -39,6 +39,9 @@ name: 'issues',
       type:'string', 
       isIn: ['High', 'Medium', 'Low']
     },
+    dueDate: {
+      type: 'string'
+    },
     timeTracking: {
       type: 'number',
     }

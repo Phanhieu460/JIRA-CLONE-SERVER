@@ -1,12 +1,14 @@
-'use strict';
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
+"use strict";
 const passport = require("passport");
-require('dotenv').config()
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const passportJWT = require("passport-jwt");
+const JWTStrategy   = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
+require("dotenv").config();
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-
-
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -21,36 +23,45 @@ passport.deserializeUser((user, done) => {
 passport.use(
   new GoogleStrategy(
     {
-      clientID: GOOGLE_CLIENT_ID,
+      callbackURL: `http://localhost:1337/user/google/callback`, //same URI as registered in Google console portal
+      clientID: GOOGLE_CLIENT_ID, //replace with copied value from Google console
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: `http://localhost:1337/user/google/callback`,
-      // passReqToCallback: true
-    },function (accessToken, refreshToken, profile, cb) {
-      console.log(profile);
-      User.findOne({ googleId: profile.id }, async function (err, user) {
-        if (user) {
-          const updatedUser = {
-            fullname: profile.displayName,
-            email: profile.emails[0].value,
-          };
-          await User.findOneAndUpdate(
-            { _id: user.id },
-            { $set: updatedUser },
-            { new: true }
-          ).then((result) => {
-            return cb(err, result);
-          });
-        } else {
-          const newUser = new User({
-            googleId: profile.id,
-            fullName: profile.displayName,
-            email: profile.emails[0].value,
-          });
-          newUser.save().then((result) => {
-            return cb(err, result);
-          });
+    },
+    async (request, accessToken, refreshToken, profile, done) => {
+      try {
+        let existingUser = await User.findOne({ id: profile.id });
+        // if user exists return the user
+        if (existingUser) {
+          return done(null, existingUser);
         }
-      });
+        // if user does not exist create a new user
+        console.log("Creating new user...", profile.id);
+        const newUser = await User.create({
+          googleId: profile.id,
+          fullName: profile.displayName,
+          email: profile.emails[0].value,
+          imgUrl: profile.photos[0].value
+        }).fetch();
+        return done(null, newUser);
+      } catch (error) {
+        return done(error, false);
+      }
     }
   )
 );
+passport.use(new JWTStrategy({
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey   : ACCESS_TOKEN_SECRET
+},
+function (jwtPayload, done) {
+
+  //find the user in db if needed
+  return User.findOneById(jwtPayload.id)
+      .then(user => {
+          return done(null, user);
+      })
+      .catch(err => {
+          return done(err);
+      });
+}
+));

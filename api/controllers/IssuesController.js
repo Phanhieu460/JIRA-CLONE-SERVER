@@ -40,6 +40,7 @@ module.exports = {
         assignee,
         priority,
         description,
+        dueDate
       } = req.body;
 
       const newIssue = await Issues.create({
@@ -51,6 +52,7 @@ module.exports = {
         status: status,
         priority: priority,
         project: project,
+        dueDate: dueDate
       }).fetch();
 
       return res.status(200).json({
@@ -72,6 +74,7 @@ module.exports = {
         reporter,
         status,
         priority,
+        dueDate
       } = req.body;
 
       let attributes = {};
@@ -96,6 +99,9 @@ module.exports = {
       }
       if (priority) {
         attributes.priority = priority;
+      }
+      if (dueDate) {
+        attributes.dueDate = dueDate;
       }
       const result = await Issues.update({ id: req.params.id }, attributes);
 
